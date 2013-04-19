@@ -72,6 +72,7 @@
 {
     [self.filterView hide:NO animated:YES];
 }
+
 #pragma mark - FilterVie delegate
 - (void)filterView:(DMFilterView *)filterView didSelectedAtIndex:(NSInteger)index
 {
@@ -79,6 +80,8 @@
     /*
     [self.filterView setSelectedBackgroundColor:[UIColor yellowColor]];
     [self.filterView setBackgroundColor:[UIColor greenColor]];
+    [self.filterView setTitlesFont:[UIFont boldSystemFontOfSize:19]];
+    [self.filterView setTitlesColor:[UIColor greenColor]];
      */
 }
 

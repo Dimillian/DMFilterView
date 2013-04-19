@@ -17,6 +17,8 @@ const CGFloat kAnimationSpeed = 0.20;
 @property (nonatomic, strong) UIImageView *backgroundView;
 @property (nonatomic, strong) UIView *selectedBackgroundView;
 @property (nonatomic, strong) UIImageView *selectedBackgroundImageView;
+
+- (void)updateButtonsStyle;
 @end
 
 @implementation DMFilterView
@@ -184,6 +186,29 @@ const CGFloat kAnimationSpeed = 0.20;
     _selectedBackgroundColor = selectedBackgroundColor;
 }
 
+#pragma mark - buttons style
+-(void)setTitlesColor:(UIColor *)titlesColor
+{
+    _titlesColor = titlesColor;
+    [self updateButtonsStyle];
+}
+
+-(void)setTitlesFont:(UIFont *)titlesFont
+{
+    _titlesFont = titlesFont;
+    [self updateButtonsStyle];
+}
+
+- (void)updateButtonsStyle
+{
+    for (UIButton *button in self.subviews) {
+        if ([button isKindOfClass:[UIButton class]]) {
+            [button setTitleColor:self.titlesColor forState:UIControlStateNormal];
+            [button.titleLabel setFont:self.titlesFont];
+        }
+    }
+}
+
 #pragma mark - strings
 - (NSString *)titleAtIndex:(NSInteger)index
 {
@@ -196,9 +221,11 @@ const CGFloat kAnimationSpeed = 0.20;
     NSAssert(index < _strings.count, @"requested index is out of bounds");
     [_strings replaceObjectAtIndex:index withObject:title];
     for (UIButton *button in self.subviews) {
-        if (button.tag == index) {
-            [button setTitle:title forState:UIControlStateNormal];
-            break;
+        if ([button isKindOfClass:[UIButton class]]) {
+            if (button.tag == index) {
+                [button setTitle:title forState:UIControlStateNormal];
+                break;
+            }
         }
     }
 }

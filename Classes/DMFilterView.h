@@ -39,6 +39,10 @@ extern const CGFloat kFilterViewHeight;
 @property (nonatomic, strong) UIImage *selectedBackgroundImage;
 //The selected background color behind the selected button
 @property (nonatomic, strong) UIColor *selectedBackgroundColor;
+//The buttons title color
+@property (nonatomic, strong) UIColor *titlesColor;
+//The buttons font
+@property (nonatomic, strong) UIFont *titlesFont;
 
 /**
 Designed initializer
