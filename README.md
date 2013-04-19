@@ -5,7 +5,11 @@ A `UIView` subclass which add itself at the bottom of any view.
 
 ##What is it ? 
 `DMFilterView` is a subclass of `UIView`, it look like a `UITabBar` but it much more lighter to implement. You just init it with an `NSArray` of strings and then attach it to your view. 
-It provide some easy delegate and customization functions.
+It provides some easy delegate and customization functions.
+
+For example I use it in [MySeeen](http://myseeenapp.com) to filter the MySeeen grid view, and I think this is the primary functionality of this control, it should act as a filter 
+In the provided example I show you how to hide and show it regarding a `UITableView` scroll. 
+Cool heh?
 
 ![image](https://raw.github.com/Dimillian/DMFilterView/master/image1.png)
 ![image](https://raw.github.com/Dimillian/DMFilterView/master/image2.png)
@@ -15,7 +19,7 @@ Note: You should change provided images by your own before using in your applica
 ##Feature
 1. Easy to use.
 2. Fully animated (Selection, show, hide).
-3. Easy customization. (fonts, colors, etc...)
+3. Easy customization. (fonts, colors, etc…)
 4. Change the background image or replace it by a color, and change the selected image or color.
 5. Ultra lite
 
@@ -32,7 +36,7 @@ Then you need to implement the only `@required` delegate method which is
 	   //Place your filter logic here
 	}
 
-`DMFilterView` also provide some other delegate `@optional` method such as
+`DMFilterView` also provides some other delegate `@optional` method such as
 
 	- (CGFloat)filterViewDisplayAnimatioSpeed:(DMFilterView *)filterView;
 	- (CGFloat)filterViewSelectionAnimationSpeed:(DMFilterView *)filterView;
