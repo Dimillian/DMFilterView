@@ -26,8 +26,8 @@ Note: You should change provided images by your own before using in your applica
 ##How to use
 Add `DMFilterView` to your project and do something like this in a view or view a view controller
 
-	_filterView = [[DMFilterView alloc]initWithStrings:@[@"ABC", @"Filter 1", @"Filter 2"] containerView:self.view];`
-	`[self.filterView attachToContainerView];
+	_filterView = [[DMFilterView alloc]initWithStrings:@[@"ABC", @"Filter 1", @"Filter 2"] containerView:self.view];
+	[self.filterView attachToContainerView];
 
 Then you need to implement the only `@required` delegate method which is
 
