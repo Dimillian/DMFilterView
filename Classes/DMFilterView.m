@@ -81,7 +81,7 @@ const CGFloat kAnimationSpeed = 0.20;
     }
 }
 
-- (void)hide:(BOOL)hide animated:(BOOL)animated
+- (void)hide:(BOOL)hide animated:(BOOL)animated animationCompletion:(void (^)(void))completion
 {
     CGRect f = self.frame;
     if (!hide) {
@@ -105,11 +105,14 @@ const CGFloat kAnimationSpeed = 0.20;
                          animations:^{
                              [self setFrame:f];
                          } completion:^(BOOL finished) {
-                             
+                             if (finished) {
+                                 completion();
+                             }
                          }];
     }
     else{
         [self setFrame:f];
+        completion();
     }
 
 }
@@ -129,11 +132,22 @@ const CGFloat kAnimationSpeed = 0.20;
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
+                         if ([self.delegate respondsToSelector:
+                              @selector(filterViewSelectionAnimationDidBegin:)]) {
+                             [self.delegate
+                              filterViewSelectionAnimationDidBegin:self];
+                         }
                          CGRect frame = self.selectedBackgroundView.frame;
                          frame.origin.x = button.frame.origin.x;
                          [self.selectedBackgroundView setFrame:frame];
                      } completion:^(BOOL finished) {
-                         
+                         if (finished) {
+                             if ([self.delegate
+                                  respondsToSelector:@selector(filterViewSelectionAnimationDidEnd:)]) {
+                                 [self.delegate
+                                  filterViewSelectionAnimationDidEnd:self];
+                             }
+                         }
                      }];
     _selectedIndex = button.tag;
     [self.delegate filterView:self didSelectedAtIndex:_selectedIndex];

@@ -20,6 +20,10 @@ extern const CGFloat kFilterViewHeight;
 - (CGFloat)filterViewDisplayAnimatioSpeed:(DMFilterView *)filterView;
 //If the delegate implement this methid it can return a custom animation speed for the selection
 - (CGFloat)filterViewSelectionAnimationSpeed:(DMFilterView *)filterView;
+//Implement this method to know when the selection animation begin
+- (void)filterViewSelectionAnimationDidBegin:(DMFilterView *)filterView;
+//Implement this method to know when the selection animation end
+- (void)filterViewSelectionAnimationDidEnd:(DMFilterView *)filterView;
 @end
 
 @interface DMFilterView : UIView
@@ -60,8 +64,11 @@ Designed initializer
 Hide and show the filter view, with or without animation
 @param hide if YES it will hide the filter view, if NO if will show the filter view
 @param animated animate or not the transition 
+@param completion A completion block which is called at the end of the show/hide animation
  */
-- (void)hide:(BOOL)hide animated:(BOOL)animated;
+- (void)hide:(BOOL)hide
+    animated:(BOOL)animated
+    animationCompletion:(void (^)(void))completion;
 /**
  @param index the button index
  @return the title of the button at the given index

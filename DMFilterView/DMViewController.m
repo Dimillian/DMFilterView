@@ -65,12 +65,16 @@
 
 #pragma mark - ScrollView delegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    [self.filterView hide:YES animated:YES];
+    [self.filterView hide:YES animated:YES animationCompletion:^{
+        
+    }];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    [self.filterView hide:NO animated:YES];
+    [self.filterView hide:NO animated:YES animationCompletion:^{
+
+    }];
 }
 
 #pragma mark - FilterVie delegate
