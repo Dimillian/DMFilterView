@@ -158,9 +158,8 @@ const CGFloat kAnimationSpeed = 0.20;
 #pragma mark - Background
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {
-    if (backgroundImage == _backgroundImage) {
+    if (_backgroundImage == backgroundImage)
         return;
-    }
     _backgroundImage = backgroundImage;
     [self.backgroundView setHidden:NO];
     [self.backgroundView setImage:_backgroundImage];
@@ -174,6 +173,8 @@ const CGFloat kAnimationSpeed = 0.20;
 
 -(void)setSelectedBackgroundImage:(UIImage *)selectedBackgroundImage
 {
+    if(_selectedBackgroundImage == selectedBackgroundImage)
+        return;
     [self.selectedBackgroundImageView setHidden:NO];
     [self.selectedBackgroundImageView setImage:selectedBackgroundImage];
     _selectedBackgroundImage = selectedBackgroundImage;
@@ -181,6 +182,8 @@ const CGFloat kAnimationSpeed = 0.20;
 
 -(void)setSelectedBackgroundColor:(UIColor *)selectedBackgroundColor
 {
+    if(_selectedBackgroundColor == selectedBackgroundColor)
+        return;
     [self.selectedBackgroundImageView setHidden:YES];
     [self.selectedBackgroundView setBackgroundColor:selectedBackgroundColor];
     _selectedBackgroundColor = selectedBackgroundColor;
@@ -189,12 +192,16 @@ const CGFloat kAnimationSpeed = 0.20;
 #pragma mark - buttons style
 -(void)setTitlesColor:(UIColor *)titlesColor
 {
+    if(_titlesColor == titlesColor)
+        return;
     _titlesColor = titlesColor;
     [self updateButtonsStyle];
 }
 
 -(void)setTitlesFont:(UIFont *)titlesFont
 {
+    if(_titlesFont == titlesFont)
+        return;
     _titlesFont = titlesFont;
     [self updateButtonsStyle];
 }
