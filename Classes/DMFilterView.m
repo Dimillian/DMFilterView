@@ -128,15 +128,15 @@ const CGFloat kAnimationSpeed = 0.20;
     else{
         animationSpeed = kAnimationSpeed;
     }
+    if ([self.delegate respondsToSelector:
+         @selector(filterViewSelectionAnimationDidBegin:)]) {
+        [self.delegate
+         filterViewSelectionAnimationDidBegin:self];
+    }
     [UIView animateWithDuration:animationSpeed
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         if ([self.delegate respondsToSelector:
-                              @selector(filterViewSelectionAnimationDidBegin:)]) {
-                             [self.delegate
-                              filterViewSelectionAnimationDidBegin:self];
-                         }
                          CGRect frame = self.selectedBackgroundView.frame;
                          frame.origin.x = button.frame.origin.x;
                          [self.selectedBackgroundView setFrame:frame];
