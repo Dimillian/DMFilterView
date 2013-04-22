@@ -49,7 +49,7 @@ extern const CGFloat kFilterViewHeight;
 @property (nonatomic, strong) UIFont *titlesFont;
 
 /**
-Designed initializer
+Designated initializer
 @param strings An array of strings containing titles of buttons. Maximum number of titles, and so of buttons is 4
  An exception will be raised if you pass more than 4 string
 @param containerView The view where the filter view will be added, can't be changed once set
