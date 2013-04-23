@@ -40,9 +40,15 @@ extern const CGFloat kFilterViewHeight;
 //You can set a background imagen the background image will remove the background color.
 @property (nonatomic, strong) UIImage *backgroundImage;
 //The selected background image behind the selected button.
+//The selected background color is set to nil if you set an image
 @property (nonatomic, strong) UIImage *selectedBackgroundImage;
 //The selected background color behind the selected button
 @property (nonatomic, strong) UIColor *selectedBackgroundColor;
+//The selected background color at the top of the selected item
+//Is set to nil if you set a selected backround image
+@property (nonatomic, strong) UIColor *selectedTopBackgroundColor;
+//The selected background top color height;
+@property (nonatomic) CGFloat selectedTopBacktroundColorHeight;
 //The buttons title color
 @property (nonatomic, strong) UIColor *titlesColor;
 //The buttons font

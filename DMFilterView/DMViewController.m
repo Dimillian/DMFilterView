@@ -9,7 +9,9 @@
 #import "DMViewController.h"
 
 @interface DMViewController ()
-
+{
+    BOOL _isColors;
+}
 @end
 
 @implementation DMViewController
@@ -17,6 +19,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _isColors = NO;
     _tableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStylePlain];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
@@ -60,7 +63,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    if (_isColors){
+        [self.filterView setSelectedBackgroundImage:[UIImage imageNamed:@"tabbar_select"]];
+        [self.filterView setBackgroundImage:[UIImage imageNamed:@"tabbar"]];
+        UIColor *mColor = [UIColor colorWithRed:240/255.0
+                                          green:130/255.0
+                                           blue:76/255.0
+                                          alpha:1.0];
+        [self.filterView setTitlesColor:mColor];
+        [self.filterView setTitlesFont:[UIFont systemFontOfSize:14]];
+    }
+    else{
+        [self.filterView setSelectedTopBackgroundColor:[UIColor grayColor]];
+        [self.filterView setSelectedTopBacktroundColorHeight:5];
+        [self.filterView setSelectedBackgroundColor:[UIColor lightGrayColor]];
+        [self.filterView setBackgroundColor:[UIColor underPageBackgroundColor]];
+        [self.filterView setTitlesFont:[UIFont boldSystemFontOfSize:19]];
+        [self.filterView setTitlesColor:[UIColor blueColor]];
+    }
+    _isColors =! _isColors;
 }
 
 #pragma mark - ScrollView delegate
@@ -81,12 +102,6 @@
 - (void)filterView:(DMFilterView *)filterView didSelectedAtIndex:(NSInteger)index
 {
     NSLog(@"%d", index);
-    /*
-    [self.filterView setSelectedBackgroundColor:[UIColor yellowColor]];
-    [self.filterView setBackgroundColor:[UIColor greenColor]];
-    [self.filterView setTitlesFont:[UIFont boldSystemFontOfSize:19]];
-    [self.filterView setTitlesColor:[UIColor greenColor]];
-     */
 }
 
 

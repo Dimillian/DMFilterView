@@ -17,6 +17,7 @@ const CGFloat kAnimationSpeed = 0.20;
 @property (nonatomic, strong) UIImageView *backgroundView;
 @property (nonatomic, strong) UIView *selectedBackgroundView;
 @property (nonatomic, strong) UIImageView *selectedBackgroundImageView;
+@property (nonatomic, strong) UIView *selectedTopBackgroundView;
 
 - (void)updateButtonsStyle;
 @end
@@ -47,6 +48,11 @@ const CGFloat kAnimationSpeed = 0.20;
         _selectedBackgroundImageView = [[UIImageView alloc]initWithFrame:self.selectedBackgroundView.frame];
         [_selectedBackgroundImageView setImage:[UIImage imageNamed:@"tabbar_select"]];
         [self.selectedBackgroundView addSubview:self.selectedBackgroundImageView];
+        _selectedTopBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0,
+                                                                             0,
+                                                                             self.selectedBackgroundView.frame.size.width,
+                                                                             10)];
+        [self.selectedBackgroundView addSubview:self.selectedTopBackgroundView];
         [self addSubview:self.selectedBackgroundView];
         for (NSString *string in strings) {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -172,8 +178,6 @@ const CGFloat kAnimationSpeed = 0.20;
 #pragma mark - Background
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {
-    if (_backgroundImage == backgroundImage)
-        return;
     _backgroundImage = backgroundImage;
     [self.backgroundView setHidden:NO];
     [self.backgroundView setImage:_backgroundImage];
@@ -185,37 +189,46 @@ const CGFloat kAnimationSpeed = 0.20;
     [super setBackgroundColor:backgroundColor];
 }
 
--(void)setSelectedBackgroundImage:(UIImage *)selectedBackgroundImage
+- (void)setSelectedBackgroundImage:(UIImage *)selectedBackgroundImage
 {
-    if(_selectedBackgroundImage == selectedBackgroundImage)
-        return;
+    self.selectedBackgroundColor = nil;
+    [self.selectedTopBackgroundView setHidden:YES];
     [self.selectedBackgroundImageView setHidden:NO];
     [self.selectedBackgroundImageView setImage:selectedBackgroundImage];
     _selectedBackgroundImage = selectedBackgroundImage;
 }
 
--(void)setSelectedBackgroundColor:(UIColor *)selectedBackgroundColor
+- (void)setSelectedBackgroundColor:(UIColor *)selectedBackgroundColor
 {
-    if(_selectedBackgroundColor == selectedBackgroundColor)
-        return;
     [self.selectedBackgroundImageView setHidden:YES];
     [self.selectedBackgroundView setBackgroundColor:selectedBackgroundColor];
     _selectedBackgroundColor = selectedBackgroundColor;
 }
 
-#pragma mark - buttons style
--(void)setTitlesColor:(UIColor *)titlesColor
+- (void)setSelectedTopBackgroundColor:(UIColor *)selectedTopBackgroundColor
 {
-    if(_titlesColor == titlesColor)
-        return;
+    [self.selectedTopBackgroundView setHidden:NO];
+    [self.selectedTopBackgroundView setBackgroundColor:selectedTopBackgroundColor];
+    _selectedTopBackgroundColor = selectedTopBackgroundColor;
+}
+
+- (void)setSelectedTopBacktroundColorHeight:(CGFloat)selectedTopBacktroundColorHeight
+{
+    CGRect frame = self.selectedTopBackgroundView.frame;
+    frame.size.height = selectedTopBacktroundColorHeight;
+    [self.selectedTopBackgroundView setFrame:frame];
+    _selectedTopBacktroundColorHeight = selectedTopBacktroundColorHeight;
+}
+
+#pragma mark - buttons style
+- (void)setTitlesColor:(UIColor *)titlesColor
+{
     _titlesColor = titlesColor;
     [self updateButtonsStyle];
 }
 
--(void)setTitlesFont:(UIFont *)titlesFont
+- (void)setTitlesFont:(UIFont *)titlesFont
 {
-    if(_titlesFont == titlesFont)
-        return;
     _titlesFont = titlesFont;
     [self updateButtonsStyle];
 }
