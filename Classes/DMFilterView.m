@@ -51,7 +51,7 @@ const CGFloat kAnimationSpeed = 0.20;
         _selectedTopBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0,
                                                                              0,
                                                                              self.selectedBackgroundView.frame.size.width,
-                                                                             10)];
+                                                                             5)];
         [self.selectedBackgroundView addSubview:self.selectedTopBackgroundView];
         [self addSubview:self.selectedBackgroundView];
         for (NSString *string in strings) {
@@ -212,12 +212,12 @@ const CGFloat kAnimationSpeed = 0.20;
     _selectedTopBackgroundColor = selectedTopBackgroundColor;
 }
 
-- (void)setSelectedTopBacktroundColorHeight:(CGFloat)selectedTopBacktroundColorHeight
+- (void)setSelectedTopBackroundColorHeight:(CGFloat)selectedTopBacktroundColorHeight
 {
     CGRect frame = self.selectedTopBackgroundView.frame;
     frame.size.height = selectedTopBacktroundColorHeight;
     [self.selectedTopBackgroundView setFrame:frame];
-    _selectedTopBacktroundColorHeight = selectedTopBacktroundColorHeight;
+    _selectedTopBackroundColorHeight = selectedTopBacktroundColorHeight;
 }
 
 #pragma mark - buttons style

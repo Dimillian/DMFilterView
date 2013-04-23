@@ -75,7 +75,7 @@
     }
     else{
         [self.filterView setSelectedTopBackgroundColor:[UIColor grayColor]];
-        [self.filterView setSelectedTopBacktroundColorHeight:5];
+        [self.filterView setSelectedTopBackroundColorHeight:5];
         [self.filterView setSelectedBackgroundColor:[UIColor lightGrayColor]];
         [self.filterView setBackgroundColor:[UIColor underPageBackgroundColor]];
         [self.filterView setTitlesFont:[UIFont boldSystemFontOfSize:19]];
