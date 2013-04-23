@@ -9,9 +9,6 @@
 #import "DMViewController.h"
 
 @interface DMViewController ()
-{
-    BOOL _isColors;
-}
 @end
 
 @implementation DMViewController
@@ -19,7 +16,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _isColors = NO;
     _tableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStylePlain];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
@@ -27,6 +23,7 @@
     _filterView = [[DMFilterView alloc]initWithStrings:@[@"ABC", @"Filter 1", @"Filter 2"] containerView:self.view];
     [self.filterView attachToContainerView];
     [self.filterView setDelegate:self];
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -43,7 +40,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 50;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -54,7 +51,15 @@
     if(cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"Cell %d", indexPath.row];
+    if (indexPath.row == 0) {
+        cell.textLabel.text = @"Default style";
+    }
+    else if (indexPath.row == 1){
+        cell.textLabel.text = @"Images style";
+    }
+    else if (indexPath.row == 2){
+        cell.textLabel.text = @"Colors style";
+    }
     
     return cell;
 }
@@ -63,8 +68,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_isColors){
-        [self.filterView setSelectedBackgroundImage:[UIImage imageNamed:@"tabbar_select"]];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row == 0) {
+        [self.filterView applyDefaultStyle];
+    }
+    else if (indexPath.row == 1){
+        [self.filterView setSelectedItemBackgroundImage:[UIImage imageNamed:@"tabbar_select"]];
         [self.filterView setBackgroundImage:[UIImage imageNamed:@"tabbar"]];
         UIColor *mColor = [UIColor colorWithRed:240/255.0
                                           green:130/255.0
@@ -72,16 +81,17 @@
                                           alpha:1.0];
         [self.filterView setTitlesColor:mColor];
         [self.filterView setTitlesFont:[UIFont systemFontOfSize:14]];
+        [self.filterView setTitleInsets:UIEdgeInsetsMake(7, 0, 0, 0)];
     }
-    else{
-        [self.filterView setSelectedTopBackgroundColor:[UIColor grayColor]];
-        [self.filterView setSelectedTopBackroundColorHeight:5];
-        [self.filterView setSelectedBackgroundColor:[UIColor lightGrayColor]];
+    else if (indexPath.row == 2){
+        [self.filterView setSelectedItemTopBackgroundColor:[UIColor grayColor]];
+        [self.filterView setSelectedItemTopBackroundColorHeight:5];
+        [self.filterView setSelectedItemBackgroundColor:[UIColor lightGrayColor]];
         [self.filterView setBackgroundColor:[UIColor underPageBackgroundColor]];
         [self.filterView setTitlesFont:[UIFont boldSystemFontOfSize:19]];
         [self.filterView setTitlesColor:[UIColor blueColor]];
+        [self.filterView setTitleInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
     }
-    _isColors =! _isColors;
 }
 
 #pragma mark - ScrollView delegate

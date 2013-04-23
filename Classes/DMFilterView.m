@@ -7,6 +7,7 @@
 //
 
 #import "DMFilterView.h"
+#import <QuartzCore/QuartzCore.h>
 
 const CGFloat kFilterViewHeight = 44.0;
 const CGFloat kAnimationSpeed = 0.20;
@@ -36,7 +37,6 @@ const CGFloat kAnimationSpeed = 0.20;
         _strings = [strings mutableCopy];
         _containerView = contrainerView;
         _backgroundView = [[UIImageView alloc]initWithFrame:self.bounds];
-        [_backgroundView setImage:[UIImage imageNamed:@"tabbar"]];
         [self addSubview:self.backgroundView];
         CGFloat x = 0.0;
         CGFloat buttonWidth = self.frame.size.width/strings.count;
@@ -46,7 +46,6 @@ const CGFloat kAnimationSpeed = 0.20;
                                                                           buttonWidth,
                                                                           self.frame.size.height)];
         _selectedBackgroundImageView = [[UIImageView alloc]initWithFrame:self.selectedBackgroundView.frame];
-        [_selectedBackgroundImageView setImage:[UIImage imageNamed:@"tabbar_select"]];
         [self.selectedBackgroundView addSubview:self.selectedBackgroundImageView];
         _selectedTopBackgroundView = [[UIView alloc]initWithFrame:CGRectMake(0,
                                                                              0,
@@ -62,12 +61,6 @@ const CGFloat kAnimationSpeed = 0.20;
                                         buttonWidth,
                                         self.frame.size.height)];
             [button setTitle:string forState:UIControlStateNormal];
-            UIColor *mColor = [UIColor colorWithRed:240/255.0
-                                              green:130/255.0
-                                               blue:76/255.0
-                                              alpha:1.0];
-            [button setTitleColor:mColor forState:UIControlStateNormal];
-            [button.titleLabel setFont:[UIFont systemFontOfSize:14]];
             [button addTarget:self
                        action:@selector(onButton:)
              forControlEvents:UIControlEventTouchUpInside];
@@ -76,6 +69,7 @@ const CGFloat kAnimationSpeed = 0.20;
             tag += 1;
         }
     }
+    [self applyDefaultStyle];
     return self;
 }
 
@@ -85,6 +79,17 @@ const CGFloat kAnimationSpeed = 0.20;
     if (!self.superview) {
         [self.containerView addSubview:self];   
     }
+}
+
+- (void)applyDefaultStyle
+{
+    //Default ugly style
+    [self setBackgroundColor:[UIColor lightGrayColor]];
+    [self setSelectedItemBackgroundColor:[UIColor darkGrayColor]];
+    [self setSelectedItemTopBackgroundColor:[UIColor blueColor]];
+    [self setTitlesColor:[UIColor blackColor]];
+    [self setTitleInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    [self setTitlesFont:[UIFont systemFontOfSize:14]];
 }
 
 - (void)hide:(BOOL)hide animated:(BOOL)animated animationCompletion:(void (^)(void))completion
@@ -179,45 +184,52 @@ const CGFloat kAnimationSpeed = 0.20;
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {
     _backgroundImage = backgroundImage;
-    [self.backgroundView setHidden:NO];
     [self.backgroundView setImage:_backgroundImage];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
 {
-    [self.backgroundView setHidden:YES];
+    self.backgroundView.image = nil;
     [super setBackgroundColor:backgroundColor];
 }
 
-- (void)setSelectedBackgroundImage:(UIImage *)selectedBackgroundImage
+- (void)setSelectedItemBackgroundImage:(UIImage *)selectedItemBackgroundImage
 {
-    self.selectedBackgroundColor = nil;
-    [self.selectedTopBackgroundView setHidden:YES];
-    [self.selectedBackgroundImageView setHidden:NO];
-    [self.selectedBackgroundImageView setImage:selectedBackgroundImage];
-    _selectedBackgroundImage = selectedBackgroundImage;
+    self.selectedItemBackgroundColor = nil;
+    self.selectedTopBackgroundView.backgroundColor = nil;
+    [self.selectedBackgroundImageView setImage:selectedItemBackgroundImage];
+    _selectedItemBackgroundImage = selectedItemBackgroundImage;
 }
 
-- (void)setSelectedBackgroundColor:(UIColor *)selectedBackgroundColor
+- (void)setSelectedItemBackgroundColor:(UIColor *)selectedItemBackgroundColor
 {
-    [self.selectedBackgroundImageView setHidden:YES];
-    [self.selectedBackgroundView setBackgroundColor:selectedBackgroundColor];
-    _selectedBackgroundColor = selectedBackgroundColor;
+    self.selectedBackgroundImageView.image = nil;
+    [self.selectedBackgroundView setBackgroundColor:selectedItemBackgroundColor];
+    _selectedItemBackgroundColor = selectedItemBackgroundColor;
 }
 
-- (void)setSelectedTopBackgroundColor:(UIColor *)selectedTopBackgroundColor
+- (void)setSelectedItemTopBackgroundColor:(UIColor *)selectedItemTopBackgroundColor
 {
-    [self.selectedTopBackgroundView setHidden:NO];
-    [self.selectedTopBackgroundView setBackgroundColor:selectedTopBackgroundColor];
-    _selectedTopBackgroundColor = selectedTopBackgroundColor;
+    [self.selectedTopBackgroundView setBackgroundColor:selectedItemTopBackgroundColor];
+    _selectedItemTopBackgroundColor = selectedItemTopBackgroundColor;
 }
 
-- (void)setSelectedTopBackroundColorHeight:(CGFloat)selectedTopBacktroundColorHeight
+- (void)setSelectedItemTopBackroundColorHeight:(CGFloat)selectedItemTopBacktroundColorHeight
 {
     CGRect frame = self.selectedTopBackgroundView.frame;
-    frame.size.height = selectedTopBacktroundColorHeight;
+    frame.size.height = selectedItemTopBacktroundColorHeight;
     [self.selectedTopBackgroundView setFrame:frame];
-    _selectedTopBackroundColorHeight = selectedTopBacktroundColorHeight;
+    _selectedItemTopBackroundColorHeight = selectedItemTopBacktroundColorHeight;
+}
+
+- (void)setTitleInsets:(UIEdgeInsets)titleInsets
+{
+    for (UIButton *button in self.subviews) {
+        if ([button isKindOfClass:[UIButton class]]) {
+            [button setTitleEdgeInsets:titleInsets];
+        }
+    }
+    _titleInsets = titleInsets;
 }
 
 #pragma mark - buttons style
@@ -261,6 +273,19 @@ const CGFloat kAnimationSpeed = 0.20;
                 break;
             }
         }
+    }
+}
+
+#pragma mark - Pan gesture
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
+        
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
     }
 }
 

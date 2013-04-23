@@ -37,22 +37,29 @@ extern const CGFloat kFilterViewHeight;
 @property (nonatomic) NSInteger selectedIndex;
 @property (nonatomic, unsafe_unretained) id<DMFilterViewDelegate>delegate;
 @property (nonatomic, readonly, assign) UIView *containerView;
-//You can set a background imagen the background image will remove the background color.
+//You can set a background image, the background image will remove the background color.
 @property (nonatomic, strong) UIImage *backgroundImage;
 //The selected background image behind the selected button.
 //The selected background color is set to nil if you set an image
-@property (nonatomic, strong) UIImage *selectedBackgroundImage;
+@property (nonatomic, strong) UIImage *selectedItemBackgroundImage;
 //The selected background color behind the selected button
-@property (nonatomic, strong) UIColor *selectedBackgroundColor;
+//The selected background image is set to nil if you set a color
+@property (nonatomic, strong) UIColor *selectedItemBackgroundColor;
 //The selected background color at the top of the selected item
 //Is set to nil if you set a selected backround image
-@property (nonatomic, strong) UIColor *selectedTopBackgroundColor;
+@property (nonatomic, strong) UIColor *selectedItemTopBackgroundColor;
 //The selected background top color height;
-@property (nonatomic) CGFloat selectedTopBackroundColorHeight;
+//Default value is 5
+@property (nonatomic) CGFloat selectedItemTopBackroundColorHeight;
 //The buttons title color
 @property (nonatomic, strong) UIColor *titlesColor;
 //The buttons font
 @property (nonatomic, strong) UIFont *titlesFont;
+//The inset of the title
+@property (nonatomic) UIEdgeInsets titleInsets;
+
+//Is the selected item view is draggable ?
+@property (nonatomic, getter = isDraggable) BOOL draggable;
 
 /**
 Designated initializer
@@ -63,8 +70,9 @@ Designated initializer
  */
 - (id)initWithStrings:(NSArray *)strings
        containerView:(UIView *)contrainerView;
-//You should called this method once to attach the filter view to the bottom of the view you passed
-//in the init method
+/**You should called this method once to attach the filter view to the 
+ bottom of the view you passed in the init method
+ */
 - (void)attachToContainerView;
 /**
 Hide and show the filter view, with or without animation
@@ -75,6 +83,14 @@ Hide and show the filter view, with or without animation
 - (void)hide:(BOOL)hide
     animated:(BOOL)animated
     animationCompletion:(void (^)(void))completion;
+
+/**
+ Provide a basic default style, this style is automaticcaly set after yout initialized DMFilter
+ If for any reasons you want to restore the default style, you can use this method
+ Basically reset images, font and insets property
+ */
+- (void)applyDefaultStyle;
+
 /**
  @param index the button index
  @return the title of the button at the given index
