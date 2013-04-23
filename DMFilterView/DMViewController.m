@@ -40,7 +40,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -59,6 +59,9 @@
     }
     else if (indexPath.row == 2){
         cell.textLabel.text = @"Colors style";
+    }
+    else{
+      cell.textLabel.text = @"SCROOOOL";
     }
     
     return cell;

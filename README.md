@@ -8,7 +8,7 @@ A `UIView` subclass which add itself at the bottom of any view.
 It provides some easy delegate and customization functions.
 
 For example I use it in [MySeeen](http://myseeenapp.com) to filter the MySeeen grid view, and I think this is the primary functionality of this control, it should act as a filter 
-In the provided example I show you how to hide and show it regarding a `UITableView` scroll. 
+In the provided example I show you how to hide and show it regarding a `UITableView` scrolling events. 
 Cool heh?
 
 ![image](https://raw.github.com/Dimillian/DMFilterView/master/image1.png)
@@ -40,6 +40,8 @@ Then you need to implement the only `@required` delegate method which is
 
 	- (CGFloat)filterViewDisplayAnimatioSpeed:(DMFilterView *)filterView;
 	- (CGFloat)filterViewSelectionAnimationSpeed:(DMFilterView *)filterView;
+
+In the provided example I show you some customization possibilities that DMFilterView offer.
 
 	
 ## Licensing 
