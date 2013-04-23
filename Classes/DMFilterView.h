@@ -58,9 +58,6 @@ extern const CGFloat kFilterViewHeight;
 //The inset of the title
 @property (nonatomic) UIEdgeInsets titleInsets;
 
-//Is the selected item view is draggable ?
-@property (nonatomic, getter = isDraggable) BOOL draggable;
-
 /**
 Designated initializer
 @param strings An array of strings containing titles of buttons. Maximum number of titles, and so of buttons is 4
