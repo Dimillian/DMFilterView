@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 extern const CGFloat kFilterViewHeight;
+extern const CGFloat kAnimationSpeed;
 
 @class DMFilterView;
 @protocol DMFilterViewDelegate <NSObject>
@@ -57,6 +58,9 @@ extern const CGFloat kFilterViewHeight;
 @property (nonatomic, strong) UIFont *titlesFont;
 //The inset of the title
 @property (nonatomic) UIEdgeInsets titleInsets;
+
+//Is the selected button is draggable. Default is YES.
+@property (nonatomic, getter = isDraggable) BOOL draggable;
 
 /**
 Designated initializer

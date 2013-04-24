@@ -74,6 +74,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         [self.filterView applyDefaultStyle];
+        [self.filterView setDraggable:YES];
     }
     else if (indexPath.row == 1){
         [self.filterView setSelectedItemBackgroundImage:[UIImage imageNamed:@"tabbar_select"]];
@@ -85,6 +86,7 @@
         [self.filterView setTitlesColor:mColor];
         [self.filterView setTitlesFont:[UIFont systemFontOfSize:14]];
         [self.filterView setTitleInsets:UIEdgeInsetsMake(7, 0, 0, 0)];
+        [self.filterView setDraggable:YES];
     }
     else if (indexPath.row == 2){
         [self.filterView setSelectedItemTopBackgroundColor:[UIColor grayColor]];
@@ -94,6 +96,7 @@
         [self.filterView setTitlesFont:[UIFont boldSystemFontOfSize:19]];
         [self.filterView setTitlesColor:[UIColor blueColor]];
         [self.filterView setTitleInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+        [self.filterView setDraggable:NO];
     }
 }
 
@@ -115,6 +118,14 @@
 - (void)filterView:(DMFilterView *)filterView didSelectedAtIndex:(NSInteger)index
 {
     NSLog(@"%d", index);
+}
+
+- (CGFloat )filterViewSelectionAnimationSpeed:(DMFilterView *)filterView
+{
+    //return the default value as example, you don't have to implement this delegate
+    //if you don't want to modify the selection speed
+    //Or you can return 0.0 to disable the animation totally
+    return kAnimationSpeed;
 }
 
 

@@ -14,13 +14,19 @@ const CGFloat kAnimationSpeed = 0.20;
 @interface DMFilterView ()
 {
     NSMutableArray *_strings;
+    CGPoint _initialDraggingPoint;
 }
 @property (nonatomic, strong) UIImageView *backgroundView;
 @property (nonatomic, strong) UIView *selectedBackgroundView;
 @property (nonatomic, strong) UIImageView *selectedBackgroundImageView;
 @property (nonatomic, strong) UIView *selectedTopBackgroundView;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 
 - (void)updateButtonsStyle;
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+- (void)pan:(UIPanGestureRecognizer *)reconizer;
+- (NSArray *)buttonsIntersectForFrame:(CGRect)frame;
+- (UIButton *)selectedButton;
 @end
 
 @implementation DMFilterView
@@ -70,6 +76,8 @@ const CGFloat kAnimationSpeed = 0.20;
         }
     }
     [self applyDefaultStyle];
+    [self setDraggable:YES];
+    [self setSelectedIndex:0];
     return self;
 }
 
@@ -132,6 +140,16 @@ const CGFloat kAnimationSpeed = 0.20;
 - (void)onButton:(id)sender
 {
     UIButton *button = (UIButton *)sender;
+    for (UIButton *btn in self.subviews) {
+        if ([btn isKindOfClass:[UIButton class]]) {
+            if ([button isEqual:btn]) {
+                [btn setUserInteractionEnabled:NO];
+            }
+            else{
+                [btn setUserInteractionEnabled:YES];
+            }
+        }
+    }
     CGFloat animationSpeed;
     if ([self.delegate respondsToSelector:@selector(filterViewSelectionAnimationSpeed:)]) {
         animationSpeed = [self.delegate filterViewSelectionAnimationSpeed:self];
@@ -166,15 +184,14 @@ const CGFloat kAnimationSpeed = 0.20;
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex
 {
-    if (_selectedIndex == selectedIndex) {
-        return;
-    }
     NSAssert(selectedIndex < _strings.count, @"requested index is out of bounds");
     UIButton *selectedButton;
     for (UIButton *button in self.subviews) {
-        if (button.tag == selectedIndex) {
-            selectedButton = button;
-            break;
+        if ([button isKindOfClass:[UIButton class]]) {
+            if (button.tag == selectedIndex) {
+                selectedButton = button;
+                break;
+            }
         }
     }
     [self onButton:selectedButton];
@@ -232,6 +249,24 @@ const CGFloat kAnimationSpeed = 0.20;
     _titleInsets = titleInsets;
 }
 
+#pragma mark - internal properti
+- (UIButton *)selectedButton
+{
+    for (UIButton *button in self.subviews) {
+        if ([button isKindOfClass:[UIButton class]]) {
+            if (button.tag == self.selectedIndex) {
+                return button;
+            }
+        }
+    }
+    return nil;
+}
+
+- (void)setSelectedButton:(UIButton *)button
+{
+    [self setSelectedIndex:button.tag];
+}
+
 #pragma mark - buttons style
 - (void)setTitlesColor:(UIColor *)titlesColor
 {
@@ -277,6 +312,19 @@ const CGFloat kAnimationSpeed = 0.20;
 }
 
 #pragma mark - Pan gesture
+- (void)setDraggable:(BOOL)draggable
+{
+    _draggable = draggable;
+    if (draggable) {
+        _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+        [self.selectedBackgroundView addGestureRecognizer:self.panGesture];
+        [self.selectedBackgroundView setUserInteractionEnabled:YES];
+    }
+    else{
+        [self.selectedBackgroundView removeGestureRecognizer:self.panGesture];
+        [self.selectedBackgroundView setUserInteractionEnabled:NO];
+    }
+}
 - (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
@@ -287,6 +335,56 @@ const CGFloat kAnimationSpeed = 0.20;
         piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
         piece.center = locationInSuperview;
     }
+}
+
+- (void)pan:(UIPanGestureRecognizer *)reconizer
+{
+    [self adjustAnchorPointForGestureRecognizer:reconizer];
+    
+    if (reconizer.state == UIGestureRecognizerStateBegan) {
+        _initialDraggingPoint = self.selectedBackgroundView.layer.position;
+        
+    }
+    else if (reconizer.state == UIGestureRecognizerStateChanged){
+        CGPoint translation = [reconizer translationInView:[self.selectedBackgroundView superview]];
+        CGFloat correctedTranslation = translation.x;
+        [self.selectedBackgroundView setCenter:CGPointMake([self.selectedBackgroundView center].x +
+                                                           correctedTranslation,
+                                                           [self.selectedBackgroundView center].y)];
+        [reconizer setTranslation:CGPointZero inView:[self.selectedBackgroundView superview]];
+        
+    }
+    else if (reconizer.state == UIGestureRecognizerStateEnded || reconizer.state == UIGestureRecognizerStateCancelled){
+        NSArray *buttons = [self buttonsIntersectForFrame:self.selectedBackgroundView.frame];
+        if (buttons.count == 1) {
+            [self setSelectedButton:[buttons objectAtIndex:0]];
+        }
+        else{
+            CGRect firstIntersection = CGRectIntersection(self.selectedBackgroundView.frame, [[buttons objectAtIndex:0]frame]);
+            CGRect secondIntersection = CGRectIntersection(self.selectedBackgroundView.frame, [[buttons objectAtIndex:1]frame]);
+            if (firstIntersection.size.width < secondIntersection.size.width) {
+                [self setSelectedButton:[buttons objectAtIndex:1]];
+            }
+            else{
+                [self setSelectedButton:[buttons objectAtIndex:0]];
+            }
+        }
+    }
+}
+
+- (NSArray *)buttonsIntersectForFrame:(CGRect)frame
+{
+    NSMutableArray *intersections = [[NSMutableArray alloc]initWithCapacity:2];
+    for (UIButton *button in self.subviews) {
+        if ([button isKindOfClass:[UIButton class]]) {
+            BOOL intersect = CGRectIntersectsRect(button.frame, frame);
+            if (intersect) {
+                [intersections addObject:button];
+            }
+            intersect = NO;
+        }
+    }
+    return intersections;
 }
 
 @end

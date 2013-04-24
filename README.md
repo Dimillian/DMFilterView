@@ -19,9 +19,10 @@ Note: You should change provided images by your own before using in your applica
 ##Features
 1. Easy to use.
 2. Fully animated (Selection, show, hide).
-3. Easy customization. (fonts, colors, etc…)
-4. Change the background image or replace it by a color, and change the selected image or color.
-5. Ultra lite
+3. Support dragging for the selected buttons, so you can drag the selector to select a new button
+4. Easy customization. (fonts, colors, etc…)
+5. Change the background image or replace it by a color, and change the selected image or color.
+6. Ultra lite
 
 ##How to use it
 Add `DMFilterView` to your project and do something like this in a view or view a view controller
